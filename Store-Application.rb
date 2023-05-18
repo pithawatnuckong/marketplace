@@ -233,6 +233,7 @@ alt successful case
         end
         deactivate account_entity
         kafka_queue --> account_entity: Tell account to update increase cash amount for seller_actor
+        deactivate kafka_queue
         activate account_entity
         account_entity -> account_entity: Acknowledge then create an account model to update account
         alt successful case
