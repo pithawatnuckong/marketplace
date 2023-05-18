@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/client/inventory.iml" filepath="$PROJECT_DIR$/client/inventory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/marketplace/marketplace.iml" filepath="$PROJECT_DIR$/marketplace/marketplace.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/marketplace-with-kafka.iml" filepath="$PROJECT_DIR$/.idea/marketplace-with-kafka.iml" />
+    </modules>
+  </component>
+</project>
