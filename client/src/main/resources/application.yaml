@@ -1,0 +1,26 @@
+server:
+  port: 8082
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  datasource:
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://db:3306/store?createDatabaseIfNotExist=true
+
+kafka:
+  server: kafka:9092
+  offset-reset: latest
+  topics:
+    marketplace:
+      create: marketplace.create.topic
+      update: marketplace.update.topic
+  groupid:
+    buyer_account: groupid.marketplace.buyer_account.topic
+    seller_account: groupid.marketplace.seller_account.topic
+    inventory: groupid.marketplace.inventory.topic
+    inbox: groupid.marketplace.inbox.topic
