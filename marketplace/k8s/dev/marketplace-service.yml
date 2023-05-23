@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: marketplace-service
+  namespace: market-application
+  labels:
+    app: marketplace-service-label
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8081
+      nodePort: 30008
+  selector:
+    app: marketplace-deployment

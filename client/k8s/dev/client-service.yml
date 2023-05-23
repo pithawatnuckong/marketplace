@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-service
+  namespace: market-application
+  labels:
+    app: client-service-label
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8082
+      nodePort: 30006
+  selector:
+    app: client-deployment

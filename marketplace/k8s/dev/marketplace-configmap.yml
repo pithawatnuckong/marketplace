@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: market-application
+  name: marketplace-configmap
+  labels:
+    app: marketplace-configmap-label
+data:
+  application.yaml: |+
+    server:
+      port: 8081
+
+    spring:
+      jpa:
+        hibernate:
+          ddl-auto: update
+
+      datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+    kafka:
+      server: http://host.minikube.internal:39092
+      topics:
+        marketplace:
+          create: marketplace.create.topic
+          update: marketplace.update.topic
+
+

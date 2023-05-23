@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-deployment
+  namespace: market-application
+  labels:
+    app: client-deployment-label
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-deployment
+  template:
+    metadata:
+      labels:
+        app: client-deployment
+    spec:
+      hostAliases:
+        - ip: 127.0.0.1
+          hostnames:
+            - localhost
+      containers:
+        - name: client-deployment-container
+          image: client:2.0
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 8082
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/app/healthcheck
+              port: http
+            failureThreshold: 3
+            periodSeconds: 90
+          readinessProbe:
+            httpGet:
+              path: /api/app/healthcheck
+              port: http
+            failureThreshold: 3
+            periodSeconds: 90
+          env:
+            - name: JAVA_OPTS
+              value: "-Xms128m -Xmx512m"
+            - name: JAVA_CONFIGS
+              value: "--spring.config.location=/home/app/config/application.yaml"
+            - name: TIME_ZONE
+              value: "-Dlogback.timezone=Asia/Bangkok"
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: spring.datasource.username
+                  name: client-secret
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: spring.datasource.password
+                  name: client-secret
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: spring.datasource.url
+                  name: client-secret
+          volumeMounts:
+            - name: client-volume
+              mountPath: /home/app/config/application.yaml
+              subPath: application.yaml
+      volumes:
+        - name: client-volume
+          configMap:
+            name: client-configmap
+
+
+

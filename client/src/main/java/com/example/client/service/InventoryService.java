@@ -7,6 +7,7 @@ import com.example.client.model.InventoryHistoryModel;
 import com.example.client.model.InventoryModel;
 import com.example.client.model.ResponseModel;
 import com.example.client.repository.InventoryHistoryNativeRepository;
+import com.example.client.repository.InventoryNativeRepository;
 import com.example.client.repository.InventoryRepository;
 import com.example.client.repository.impl.InventoryNativeRepositoryImpl;
 import org.springframework.stereotype.Service;
@@ -18,16 +19,16 @@ import java.util.List;
 @Service
 public class InventoryService {
 
-    public InventoryService(InventoryRepository inventoryRepository, InventoryComponent inventoryComponent, InventoryNativeRepositoryImpl inventoryNativeRepositoryImpl, InventoryHistoryNativeRepository inventoryHistoryNativeRepository) {
+    public InventoryService(InventoryRepository inventoryRepository, InventoryComponent inventoryComponent, InventoryNativeRepository inventoryNativeRepository, InventoryHistoryNativeRepository inventoryHistoryNativeRepository) {
         this.inventoryRepository = inventoryRepository;
         this.inventoryComponent = inventoryComponent;
-        this.inventoryNativeRepositoryImpl = inventoryNativeRepositoryImpl;
+        this.inventoryNativeRepository = inventoryNativeRepository;
         this.inventoryHistoryNativeRepository = inventoryHistoryNativeRepository;
     }
 
     private final InventoryRepository inventoryRepository;
     private final InventoryComponent inventoryComponent;
-    private final InventoryNativeRepositoryImpl inventoryNativeRepositoryImpl;
+    private final InventoryNativeRepository inventoryNativeRepository;
     private final InventoryHistoryNativeRepository inventoryHistoryNativeRepository;
 
     public ResponseModel<Void> insertInventoryThenResponse(InventoryModel inventoryModel) {
@@ -75,7 +76,7 @@ public class InventoryService {
 
             this.inventoryHistoryNativeRepository.insertInventoryHistories(inventoryHistoryModelList);
 
-            this.inventoryNativeRepositoryImpl.updateNewUser(inventoryModels);
+            this.inventoryNativeRepository.updateNewUser(inventoryModels);
         } catch (Exception ex){
             ex.printStackTrace();
         }
@@ -86,6 +87,6 @@ public class InventoryService {
     }
 
     private List<InventoryModel> findInventoriesByInventory(InventoryCriteriaModel inventoryCriteriaModel){
-        return this.inventoryNativeRepositoryImpl.findInventoriesByInventory(inventoryCriteriaModel);
+        return this.inventoryNativeRepository.findInventoriesByInventory(inventoryCriteriaModel);
     }
 }

@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: marketplace-deployment
+  namespace: market-application
+  labels:
+    app: marketplace-deployment-label
+spec:
+  selector:
+    matchLabels:
+      app: marketplace-deployment
+  template:
+    metadata:
+      labels:
+        app: marketplace-deployment
+    spec:
+      hostAliases:
+        - ip: 127.0.0.1
+          hostnames:
+            - localhost
+      containers:
+        - name: marketplace-deployment-container
+          image: marketplace:2.0
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 8081
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/app/healthcheck
+              port: http
+            failureThreshold: 3
+            periodSeconds: 90
+          readinessProbe:
+            httpGet:
+              path: /api/app/healthcheck
+              port: http
+            failureThreshold: 3
+            periodSeconds: 90
+          env:
+            - name: JAVA_OPTS
+              value: "-Xms128m -Xmx512m"
+            - name: JAVA_CONFIGS
+              value: "--spring.config.location=/home/app/config/application.yaml"
+            - name: TIME_ZONE
+              value: "-Dlogback.timezone=Asia/Bangkok"
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: spring.datasource.url
+                  name: marketplace-secret
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: spring.datasource.username
+                  name: marketplace-secret
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: spring.datasource.password
+                  name: marketplace-secret
+          volumeMounts:
+            - mountPath: /home/app/config/application.yaml
+              subPath: application.yaml
+              name: marketplace-volume
+      volumes:
+        - name: marketplace-volume
+          configMap:
+            name: marketplace-configmap
