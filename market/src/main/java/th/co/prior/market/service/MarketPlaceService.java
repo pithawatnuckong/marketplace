@@ -1,7 +1,5 @@
 package th.co.prior.market.service;
 
-import org.springframework.stereotype.Service;
-import th.co.prior.market.component.MarketPlaceComponent;
 import th.co.prior.market.entity.InventoryEntity;
 import th.co.prior.market.exception.BadRequest;
 import th.co.prior.market.model.*;

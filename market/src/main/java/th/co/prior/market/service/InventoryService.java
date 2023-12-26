@@ -3,37 +3,45 @@ package th.co.prior.market.service;
 import org.springframework.stereotype.Service;
 import th.co.prior.market.component.InventoryComponent;
 import th.co.prior.market.entity.InventoryEntity;
+import th.co.prior.market.exception.BadRequest;
 import th.co.prior.market.model.InventoryCriteriaModel;
 import th.co.prior.market.model.InventoryModel;
 import th.co.prior.market.model.ResponseModel;
+import th.co.prior.market.repository.InventoryNativeRepository;
 import th.co.prior.market.repository.InventoryRepository;
-import th.co.prior.market.repository.impl.InventoryNativeRepositoryImpl;
 
 import java.util.List;
 
 @Service
 public class InventoryService {
 
-    public InventoryService(InventoryRepository inventoryRepository, InventoryComponent inventoryComponent, InventoryNativeRepositoryImpl inventoryNativeRepositoryImpl) {
+    public InventoryService(InventoryRepository inventoryRepository, InventoryComponent inventoryComponent, InventoryNativeRepository inventoryNativeRepository) {
         this.inventoryRepository = inventoryRepository;
         this.inventoryComponent = inventoryComponent;
-        this.inventoryNativeRepositoryImpl = inventoryNativeRepositoryImpl;
+        this.inventoryNativeRepositoryImpl = inventoryNativeRepository;
     }
 
-    private InventoryRepository inventoryRepository;
-    private InventoryComponent inventoryComponent;
-    private InventoryNativeRepositoryImpl inventoryNativeRepositoryImpl;
+    private final InventoryRepository inventoryRepository;
+    private final InventoryComponent inventoryComponent;
+    private final InventoryNativeRepository inventoryNativeRepositoryImpl;
 
     public ResponseModel<Void> insertInventoryThenResponse(InventoryModel inventoryModel) {
         ResponseModel<Void> result = new ResponseModel<>();
         result.setStatus(200);
         result.setDescription("ok");
         try {
+            if (inventoryModel.getItemName().equals("")) {
+                throw new BadRequest("Inventory name cannot empty");
+            }
             InventoryEntity inventoryEntity = new InventoryEntity();
             this.inventoryComponent.inventoryTransformModelToEntity(inventoryModel, inventoryEntity);
-            System.out.println(inventoryEntity);
             this.insertAndUpdateInventory(inventoryEntity);
-        } catch (Exception ex) {
+        }
+        catch (BadRequest ex) {
+            result.setStatus(400);
+            result.setDescription(ex.getMessage());
+        }
+        catch (Exception ex) {
             result.setStatus(500);
             result.setDescription(ex.getMessage());
         }

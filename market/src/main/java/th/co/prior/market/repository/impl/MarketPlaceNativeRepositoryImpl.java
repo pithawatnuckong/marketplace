@@ -24,7 +24,7 @@ public class MarketPlaceNativeRepositoryImpl implements MarketPlaceNativeReposit
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public int insertMarketplaces(List<MarketPlaceModel> marketPlaceModels) {
@@ -114,8 +114,8 @@ public class MarketPlaceNativeRepositoryImpl implements MarketPlaceNativeReposit
                     return model;
                 }
             }, paramList.toArray());
-            return marketPlaceModels;
 
+            return marketPlaceModels;
     }
 
 

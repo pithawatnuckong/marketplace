@@ -19,7 +19,7 @@ public class InventoryRestController {
         this.inventoryService = inventoryService;
     }
 
-    private InventoryService inventoryService;
+    private final InventoryService inventoryService;
 
     @PostMapping("/inventory")
     public ResponseModel<Void> insertInventory(@RequestBody InventoryModel inventoryModel)  {

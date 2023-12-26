@@ -21,7 +21,7 @@ public class InventoryNativeRepositoryImpl implements InventoryNativeRepository 
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public List<InventoryModel> findInventoriesByInventory(InventoryCriteriaModel inventoryCriteriaModel) {

@@ -13,7 +13,7 @@ public class AccountRestController {
         this.accountService = accountService;
     }
 
-    private AccountService accountService;
+    private final AccountService accountService;
 
     @PostMapping("/account")
     public ResponseModel<Void> insertAndUpdateAccount(@RequestBody AccountModel accountModel) {

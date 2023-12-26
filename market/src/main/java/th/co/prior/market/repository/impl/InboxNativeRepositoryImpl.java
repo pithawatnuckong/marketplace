@@ -65,9 +65,11 @@ public class InboxNativeRepositoryImpl implements InboxNativeRepository {
         StringBuilder sb = new StringBuilder();
         StringJoiner stringJoiner = new StringJoiner(",", "(", ")");
         List<Object> paramList = new ArrayList<>();
+
         sb.append(" UPDATE inbox ");
         sb.append(" SET status = true ");
         sb.append(" WHERE id IN ");
+
         for (InboxModel model: inboxModels) {
             stringJoiner.add(" ? ");
             paramList.add(model.getId());

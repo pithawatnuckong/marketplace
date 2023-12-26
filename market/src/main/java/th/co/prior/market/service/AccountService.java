@@ -1,8 +1,10 @@
 package th.co.prior.market.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import th.co.prior.market.component.AccountComponent;
 import th.co.prior.market.entity.AccountEntity;
+import th.co.prior.market.exception.BadRequest;
 import th.co.prior.market.model.AccountModel;
 import th.co.prior.market.model.ResponseModel;
 import th.co.prior.market.repository.AccountRepository;
@@ -17,18 +19,28 @@ public class AccountService {
         this.accountComponent = accountComponent;
     }
 
-    private AccountRepository accountRepository;
-    private AccountComponent accountComponent;
+    private final AccountRepository accountRepository;
+    private final AccountComponent accountComponent;
 
+    @Transactional()
     public ResponseModel<Void> insertAccountAndUpdateThenResponse(AccountModel accountModel) {
         ResponseModel<Void> result = new ResponseModel<>();
         result.setStatus(200);
         result.setDescription("ok");
         try {
+            if(accountModel.getName() == null) {
+                throw new BadRequest("Name cannot be empty.");
+            }
             AccountEntity accountEntity =  new AccountEntity();
             this.accountComponent.accountTransformModelToEntity(accountEntity, accountModel);
             this.insertAndUpdateAccount(accountEntity);
-        } catch (Exception ex) {
+        }
+        catch (BadRequest ex) {
+            ex.printStackTrace();
+            result.setStatus(400);
+            result.setDescription(ex.getMessage());
+        }
+        catch (Exception ex) {
             ex.printStackTrace();
             result.setStatus(500);
             result.setDescription(ex.getMessage());

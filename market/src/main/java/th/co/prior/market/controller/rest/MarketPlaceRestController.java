@@ -18,7 +18,7 @@ public class MarketPlaceRestController {
     public MarketPlaceRestController(MarketPlaceService marketPlaceService) {
         this.marketPlaceService = marketPlaceService;
     }
-    private MarketPlaceService marketPlaceService;
+    private final MarketPlaceService marketPlaceService;
 
     @PostMapping("/marketplace")
     public ResponseModel<Integer> insertMarketPlace(@RequestBody List<MarketPlaceModel> marketPlaceModels) {
